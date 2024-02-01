@@ -1,0 +1,22 @@
+BOARD:N: Start: Wed Jan 31 19:48:24 EST 2024
+BOARD:N: Version: Build_morgannthain
+BOARD:N: Logging: /Users/morgannthain/code/brown/cs234/Code Bubbles Tutorial/bubbles_log.log
+BOARD:N: Bedrock: /Users/morgannthain/code/brown/cs234/Code Bubbles Tutorial/bedrock_log.log
+BOARD:N: Props: false true @x86_64 x86_64
+BDOC:E: Problem scanning index https://docs.oracle.com/en/java/javase/17/docs/api//index-all.html
+BDOC:EX: HTTP error fetching URL
+org.jsoup.HttpStatusException: HTTP error fetching URL. Status=404, URL=https://docs.oracle.com/en/java/javase/17/docs/api//index-all.html
+	at org.jsoup.helper.HttpConnection$Response.execute(HttpConnection.java:435)
+	at org.jsoup.helper.HttpConnection$Response.execute(HttpConnection.java:410)
+	at org.jsoup.helper.HttpConnection.execute(HttpConnection.java:164)
+	at org.jsoup.helper.HttpConnection.get(HttpConnection.java:153)
+	at org.jsoup.Jsoup.parse(Jsoup.java:183)
+	at edu.brown.cs.bubbles.bdoc.BdocHtmlScanner.scanIndex(BdocHtmlScanner.java:50)
+	at edu.brown.cs.bubbles.bdoc.BdocRepository.loadJavadocFile(BdocRepository.java:370)
+	at edu.brown.cs.bubbles.bdoc.BdocRepository.loadJavadoc(BdocRepository.java:347)
+	at edu.brown.cs.bubbles.bdoc.BdocRepository.access$000(BdocRepository.java:72)
+	at edu.brown.cs.bubbles.bdoc.BdocRepository$Searcher.run(BdocRepository.java:756)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+BNOTE:W: Problem opening database: java.sql.SQLException: Database '/Users/morgannthain/code/brown/cs234/Code Bubbles Tutorial/.bubbles/ProgrammersLog_Code Bubbles Tutorial' not found.

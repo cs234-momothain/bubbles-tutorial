@@ -1,0 +1,68 @@
+<ROOT DELTA='0' DELTA1='0'>
+  <SHAPE X='0.0' Y='25.0' WIDTH='1440.0' HEIGHT='875.0' />
+  <TOPBAR>
+    <SHAPE X='0.0' Y='0.0' WIDTH='1279.0' HEIGHT='12.0' />
+    <LABEL />
+  </TOPBAR>
+  <OVERVIEW>
+    <SHAPE X='0.0' Y='12.0' WIDTH='1279.0' HEIGHT='92.0' />
+  </OVERVIEW>
+  <VIEWAREA>
+    <SHAPE X='0.0' Y='104.0' WIDTH='1440.0' HEIGHT='743.0' />
+    <VIEW X='3574.0' Y='2772.0' WIDTH='1440.0' HEIGHT='743.0' />
+  </VIEWAREA>
+  <BUBBLEAREA MAXX='5014' MAXY='3515' SCALE='1.0'>
+    <SHAPE X='-3574.0' Y='-2772.0' WIDTH='48000.0' HEIGHT='10240.0' />
+    <BUBBLES>
+      <BUBBLE ID='1398390920' FIXED='false' FLOAT='true' DOCKED='true' INTERIOR='' BORDER='0xff0000ff' FOCUS='0xffffa500' TRANSIENT='false' CTIME='1706748561167' LASTVIEWED='1706750002956' UNVIEWED='0' X='4738' Y='2772' W='276' H='743' CONFIG='BASS'>
+        <CONTENT TYPE='SEARCH' STATIC='true' TEXT='' />
+      </BUBBLE>
+      <BUBBLE ID='1266273053' FIXED='false' FLOAT='false' DOCKED='false' INTERIOR='' BORDER='0xff0000ff' FOCUS='0xffffa500' TRANSIENT='false' CTIME='1706749170995' LASTVIEWED='1706750002956' UNVIEWED='0' X='4185' Y='3105' W='313' H='335' />
+      <BUBBLE ID='1714073052' FIXED='false' FLOAT='false' DOCKED='false' INTERIOR='0xffffffff' BORDER='0xff0000ff' FOCUS='0xffffa500' TRANSIENT='false' CTIME='1706749956714' LASTVIEWED='1706750002956' UNVIEWED='0' X='4049' Y='2827' W='731' H='266' CONFIG='BALE'>
+        <CONTENT TYPE='FRAGMENT' FRAGTYPE='METHOD' FILE='/Users/morgannthain/code/brown/cs234/Code Bubbles Tutorial/romp/src/edu/brown/cs/bubbles/tutorial/romp/Board.java' PROJECT='romp' NAME='edu.brown.cs.bubbles.tutorial.romp.Board.drawPendulum(Pendulum,Graphics)'>
+          <ELISIONS />
+        </CONTENT>
+      </BUBBLE>
+      <BUBBLE ID='577621652' FIXED='false' FLOAT='false' DOCKED='false' INTERIOR='0xffffffff' BORDER='0xff0000ff' FOCUS='0xffffa500' TRANSIENT='false' CTIME='1706749331765' LASTVIEWED='1706750002956' UNVIEWED='0' X='3336' Y='2827' W='693' H='628' CONFIG='BALE'>
+        <CONTENT TYPE='FRAGMENT' FRAGTYPE='METHOD' FILE='/Users/morgannthain/code/brown/cs234/Code Bubbles Tutorial/romp/src/edu/brown/cs/bubbles/tutorial/romp/Board.java' PROJECT='romp' NAME='edu.brown.cs.bubbles.tutorial.romp.Board.DrawArea.paintComponent(Graphics)'>
+          <ELISIONS>
+            <ELISION START='1195' END='1275' NAME='BlockComment' />
+            <ELISION START='1275' END='1312' NAME='Block' />
+          </ELISIONS>
+        </CONTENT>
+      </BUBBLE>
+    </BUBBLES>
+    <GROUPS>
+      <GROUP INDEX='2' LEFTCOLOR='0xffe3d7de' RIGHTCOLOR='0xffe37fbd' LABELCOLOR='0xffe3b1d0'>
+        <TITLE />
+        <BUBBLE ID='950394405' />
+        <BUBBLE ID='1266273053' />
+        <BUBBLE ID='196158164' />
+        <BUBBLE ID='1714073052' />
+        <BUBBLE ID='577621652' />
+      </GROUP>
+    </GROUPS>
+    <LINKS>
+      <LINK RECT='true' STYLE='STYLE_SOLID' WIDTH='2.5'>
+        <FROM ID='577621652'>
+          <PORT CONFIG='BALE' LINE='103' />
+        </FROM>
+        <TO ID='1714073052'>
+          <PORT CONFIG='BUDA' ANY='true' POSITION='BORDER_EW_TOP'>
+            <RELOFF X='-0.9972640218878249' Y='-0.924812030075188' />
+            <BASEOFF X='0.0' Y='0.0' />
+          </PORT>
+        </TO>
+      </LINK>
+    </LINKS>
+    <WORKINGSETS>
+      <WORKINGSET TOPCOLOR='0xff78a3bf' BOTTOMCOLOR='0xffb6bcbf' BORDERCOLOR='0xff3086bf' YLOC='9497' CREATE='1706749097488' GROWTH='NONE'>
+        <REGION X='4195.0' Y='0.0' WIDTH='1440.0' HEIGHT='10240.0' />
+        <NAME>Create Task...</NAME>
+      </WORKINGSET>
+    </WORKINGSETS>
+  </BUBBLEAREA>
+  <BASSDATA TEXTLITERAL='false' TEXTUSECASE='false' TEXTSTRING='' />
+  <BDDT CONFIG='ROMP nine' />
+  <BBOOK />
+</ROOT>

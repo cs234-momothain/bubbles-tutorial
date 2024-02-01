@@ -1,0 +1,187 @@
+/********************************************************************************/
+/*										*/
+/*		Magnet.java							*/
+/*										*/
+/*	Implements calculations related to the forces between magnets		*/
+/*										*/
+/********************************************************************************/
+
+package edu.brown.cs.bubbles.tutorial.romp;
+
+public class Magnet {
+
+/** Magnetic constant */
+private static float K;
+/** Height of the top of the magnet above the x,y plane */
+private static float height   = .125f;
+/** The diameter of the magnet */
+private static float diameter = .5f;
+/** The strength of the magnet */
+private static int   strength = 1;
+/** The position of the center of the magnet */
+private Position     pos;
+/** The direction (attracts vs. repels) of the magnet */
+private Direction    dir;
+
+static {
+   K = calculateK();
+}
+
+// Constructors
+/** Construct a magnet at point (x,y) on the plane with direction dir */
+public Magnet(float x,float y,Direction dir)
+{
+   // need to make sure actually on the board
+   this.pos = new Position(x,y,height);
+   this.dir = dir;
+}
+
+/** Construct a magnet at Position pos with direction dir*/
+public Magnet(Position pos,Direction dir)
+{
+   // need to make sure actually on the board
+   this.pos = pos;
+   this.dir = dir;
+}
+
+// Accessors
+public int getStrength()
+{
+   return strength;
+}
+
+public Position getPos()
+{
+   return pos;
+}
+
+public Direction getDir()
+{
+   return dir;
+}
+
+public static float getDiameter()
+{
+   return diameter;
+}
+
+// Utilities
+/** Move the magnet to a new position
+@return a new Position
+*/
+public Position move(Position newPos)
+{
+   this.pos = newPos;
+   return getPos();
+}
+
+/** Reverse the direction (attracts/repels) of the magnet
+@return a new Direction
+*/
+public Direction flip(Direction newDir)
+{
+   this.dir = newDir;
+   return getDir();
+}
+
+/** Construct a printable representation of the magnet
+*/
+public String toString()
+{
+   StringBuffer buf = new StringBuffer();
+   buf.append("<MAGNET: ");
+   buf.append(pos);
+   buf.append(", ");
+   buf.append(dir);
+   buf.append(">");
+   return buf.toString();
+}
+
+/** Returns true if this magnet attracts otherMag, false otherwise
+*/
+public boolean attractsP(Magnet otherMag)
+{
+   return dir.attractsP(otherMag.getDir());
+}
+
+/** Calculates the force between this magnet and otherMag using the formula
+from the assignment
+@return a new Force
+*/
+public Force calculateForce(Magnet otherMag)
+{
+   // calculate the force between one magnet and another
+   int direction;
+
+   if (attractsP(otherMag)) {
+      direction = 1;
+   }
+   else {
+      direction = -1;
+   }
+
+   double magnitude = (direction * K * strength * otherMag.getStrength())
+	    / Math.pow(getDistance(otherMag), 2);
+
+   Position otherPos = otherMag.getPos();
+   double deltaX = pos.getX() - otherPos.getX();
+   double deltaY = pos.getY() - otherPos.getY();
+   double deltaZ = pos.getZ() - otherPos.getZ();
+
+   // use a pvec to get the angles
+   PhysicsVector vec = new PhysicsVector(deltaX,deltaY,deltaZ);
+   Force mForce = new Force(magnitude,vec.getTheta(),vec.getPhi());
+
+   /*
+   System.err.println("Magnet: " + magnitude + ", " + mForce.getTheta() + ", " + mForce.getPhi());
+   System.err.println("         " + mForce.getIHat() + ", " +
+			     mForce.getJHat() + ", " +
+			     mForce.getKHat());
+   */
+   return mForce;
+}
+
+/** Returns the distance between this magnet and otherMag */
+public double getDistance(Magnet otherMag)
+{
+   return pos.distance(otherMag.getPos());
+}
+
+/** Return true if magnets overlap, false otherwise */
+public boolean overlap(Magnet otherMag)
+{
+
+   // magnets are .5inches in diameter
+   return (getDistance(otherMag) < .5);
+}
+
+/** Calculates a value for the magnetic constant based on the infomration that
+the magnetic force balances the force of gravity when the pendulum is at an angle of 10
+degrees.
+*/
+private static float calculateK()
+{
+   // k comes out a bit too small, it seems
+   float length = Pendulum.getLength();
+   float mass = Pendulum.getMass();
+   float x = 1.3f;
+   float y = 0f;
+   double height = Pendulum.getRestingHeight();
+   double sine = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) / length;
+   Angle angle = new Angle(Math.asin(sine));
+   // System.err.println(angle);
+   height += length * angle.cosine();
+
+
+   Position pos = new Position(x,y,(float) height);
+
+   Magnet pendulumMag = new Magnet(pos,new Direction(1));
+   Magnet centerMag = new Magnet(0,0,new Direction(-1));
+   double r = pendulumMag.getDistance(centerMag);
+   double k = -Math.pow(r, 2) * mass * Gravity.getG() * angle.sine();
+   // System.err.println("Calculated k as " + k );
+   return (float) k;
+}
+
+
+}

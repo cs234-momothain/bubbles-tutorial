@@ -1,0 +1,230 @@
+/********************************************************************************/
+/*										*/
+/*		Board.java							*/
+/*										*/
+/*	A graphical display for the toy.  Calls the update function of the	*/
+/*	Pendulum								*/
+/*										*/
+/********************************************************************************/
+
+package edu.brown.cs.bubbles.tutorial.romp;
+
+import java.awt.*;
+import javax.swing.*;
+import java.util.List;
+
+
+public class Board extends JFrame {
+
+
+
+/** An array of Magnet objects */
+private List<Magnet>	  magnets;
+/** The pendulum of the toy */
+private Pendulum	  pendulum;
+/** A conversion factor for mapping from inches to screen position */
+private static int	pixelsPerInch	 = 100;
+
+private static final long serialVersionUID = 1L;
+
+// constructors
+/** Construct a Board from an array of Magnets and a Pendulum */
+public Board(List<Magnet> magnets,Pendulum pendulum)
+{
+   this.magnets = magnets;
+   this.pendulum = pendulum;
+   setUpWindow();
+}
+
+/** Set up the window - size, listeners, colors, visibility */
+private void setUpWindow()
+{
+   setLocation(20, 20);
+   // setSizeInInches(5,5);
+   setSizeInInches(6, 6);
+   setBackground(Color.white);
+   setForeground(Color.black);
+   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+   setContentPane(new DrawArea());
+   setVisible(true);
+   toFront();
+
+}
+
+private class DrawArea extends JPanel {
+
+   private static final long serialVersionUID = 1;
+
+   DrawArea() {
+      setDoubleBuffered(true);
+    }
+
+   @Override protected void paintComponent(Graphics graphics) {
+         // Adjust the origin to the center of the visible window
+      Dimension d = getSize();
+      Insets i = getInsets();
+   
+      graphics.translate((d.width + i.left) / 2, (d.height + i.top) / 2);
+   
+      graphics.setColor(Color.lightGray);
+   
+      // graphics.drawRect(-500,-500,1000,1000);
+      // drawRectInches(-2.5f, -2.5f, 5f, 5f, graphics);
+   
+      // Circles on the background
+      drawCircleInches(0, 0, 5, graphics);
+      drawCircleInches(0, 0, 4, graphics);
+      drawCircleInches(0, 0, 3, graphics);
+      drawCircleInches(0, 0, 2, graphics);
+      drawCircleInches(0, 0, 1, graphics);
+   
+      // Dots on the diagonals
+      float inchCoord = (float) (2.5 / Math.sqrt(2));
+      drawDotInches(inchCoord, inchCoord, .5f, graphics);
+      drawDotInches(-inchCoord, inchCoord, .5f, graphics);
+      drawDotInches(inchCoord, -inchCoord, .5f, graphics);
+      drawDotInches(-inchCoord, -inchCoord, .5f, graphics);
+   
+      // Dot in the center (get rid of this)
+      drawDotInches(0, 0, .5f, graphics);
+   
+      // Dot in the upper right (post of pendulum)
+      drawDotInches(2.25f, 2.25f, .5f, graphics);
+        
+      // Draw magnets
+      graphics.setColor(Color.red);
+      for (Magnet m : magnets) {
+         // System.err.println("Drawing magnet: " + m);
+         // m.draw(graphics);
+         drawMagnet(m, graphics);
+       }
+   
+      // Draw pendulum
+      drawPendulum(pendulum, graphics);
+    }
+
+}	// end of inner class DrawArea
+
+// utilities
+/** Convert from inches to pixels */
+public static int inchesToPixels(float inches)
+{
+   return Math.round(inches * pixelsPerInch);
+}
+
+/** Set the size of the window in inches
+      @param x The width of the window in inches
+      @param y The height of the window in inches
+      */
+private void setSizeInInches(int x,int y)
+{
+   Insets i = getInsets();
+   super.setSize(i.left + i.right + x * pixelsPerInch, i.bottom + i.top + y
+		    * pixelsPerInch);
+}
+
+/** Draw a circle on the screen
+      @param x The x coordinate of the center of the circle, in inches.
+   @param y The y coordinate of the center of the circle, in inches.
+   @param diameter The diameter of the circle, in inches.
+   @param g A graphics context
+   */
+private void drawCircleInches(int x,int y,int diameter,Graphics g)
+{
+   y = -y;
+   float radius = diameter / 2f;
+   int pDiameter = inchesToPixels(diameter);
+   g.drawOval(inchesToPixels(x - radius), inchesToPixels(y - radius), pDiameter,
+		 pDiameter);
+}
+
+/** Draw a filled circle on the screen
+      @param x The x coordinate of the center of the circle, in inches.
+   @param y The y coordinate of the center of the circle, in inches.
+   @param diameter The diameter of the circle, in inches.
+   @param g A graphics context
+   */
+private void drawDotInches(float x,float y,float diameter,Graphics g)
+{
+   y = -y;
+   float radius = diameter / 2f;
+   int pDiameter = inchesToPixels(diameter);
+   int corrX = inchesToPixels(x - radius);
+   int corrY = inchesToPixels(y - radius);
+
+   g.setClip(corrX, corrY, pDiameter, pDiameter);
+   g.fillOval(inchesToPixels(x - radius), inchesToPixels(y - radius), pDiameter,
+		 pDiameter);
+}
+
+/** Draw a rectangle on the screen
+      @param x The x coordinate of the lower left corner of the rectangle, in inches.
+   @param y The y coordinate of the lower left corner of the rectangle, in inches.
+   @param width The width of the rectangle, in inches.
+   @param height The height of the rectangle, in inches.
+   @param g A graphics context
+   */
+private void drawRectInches(float x,float y,float width,float height,Graphics g)
+{
+   g.drawRect(inchesToPixels(x), inchesToPixels(y), inchesToPixels(width),
+		 inchesToPixels(height));
+}
+
+
+
+/** Draw a magnet on the screen.  Magnets are rendered as green filled circles.  A "+" sign
+      on the top of the magnet means that it attracts the pendulum, whereas a "-" sign
+   indicates the opposite */
+public void drawMagnet(Magnet m,Graphics g)
+{
+   Position pos = m.getPos();
+   g.setColor(Color.green);
+   drawDotInches(pos.getX(), pos.getY(), Magnet.getDiameter(), g);
+   g.setColor(Color.black);
+   g.setFont(new Font("Helvetica",Font.BOLD,36));
+   if (m.getDir().attractsP()) {
+      g.drawString("+", Board.inchesToPixels(pos.getX()),
+		      Board.inchesToPixels(-pos.getY()));
+    }
+   else {
+      g.drawString("-", Board.inchesToPixels(pos.getX()),
+		      Board.inchesToPixels(-pos.getY()));
+    }
+   // update(g);
+}
+
+/** Draw the pendulum on the screen.	The pendulum is rendered as a blue filled circle */
+public void drawPendulum(Pendulum p,Graphics g)
+{
+   // System.err.println("Drawing pendulum: " + mag);
+   Magnet mag = p.getMagnet();
+   Position pos = mag.getPos();
+   // System.err.println("    Drawing at " + pos.getX() + ", " + pos.getY());
+   // System.err.println("    " + Board.inchesToPixels(pos.getX()) + ", " +
+   // Board.inchesToPixels(pos.getY()));
+   g.setColor(Color.blue);
+
+   drawDotInches(pos.getX(), pos.getY(), Magnet.getDiameter(), g);
+
+   /*g.drawLine(0,0,Board.inchesToPixels(pos.getX()),
+		   Board.inchesToPixels(pos.getY()));*/
+}
+
+/** Update the graphics.  Call the pendulum's update routine repeatedly until .05 seconds
+					       worth of updates have been performed.  Then render the graphics for the last update and return.
+					       */
+public boolean update(List<Magnet> magnets)
+{
+   float time = 0;
+   while (time < .05) {
+      time += pendulum.update(magnets);
+    }
+
+   repaint();
+
+   return true;
+}
+
+
+
+}

@@ -1,0 +1,74 @@
+/********************************************************************************/
+/*										*/
+/*		Direction.java							*/
+/*										*/
+/*	Implements the direction (attracts vs. repels) or a magnet		*/
+/*										*/
+/********************************************************************************/
+
+package edu.brown.cs.bubbles.tutorial.romp;
+
+
+public class Direction {
+
+/** True if the magnet attracts the pendulum, false otherwise */
+boolean attractsP;
+
+public Direction()
+{}
+
+/** Create a new Direction from a boolean */
+public Direction(boolean attractsP)
+{
+   this.attractsP = attractsP;
+}
+
+/** Create a new Direction from an integer, for use during intialization
+   from a file.  A -1 translates to false and a +1 translates to true. */
+public Direction(int direction)
+{
+   if (direction == -1) {
+      attractsP = false;
+    }
+   else if (direction == 1) {
+      attractsP = true;
+    }
+   else {
+      System.err.println("Invalid magnet format");
+      System.exit(-1);
+    }
+}
+
+public boolean attractsP()
+{
+   return attractsP;
+}
+
+/** Return true if this Direction and that Direction attract each other
+      (i.e. have different directions w.r.t. attracting the pendulum) */
+public boolean attractsP(Direction that)
+{
+   if (this.attractsP() && !that.attractsP()) {
+      return true;
+    }
+   else if (!this.attractsP() && that.attractsP()) {
+      return true;
+    }
+   else {
+      return false;
+    }
+}
+
+/** Generate a printable representation of a Direction */
+public String toString()
+{
+   if (attractsP) {
+      return "ATTRACTS";
+    }
+   else {
+      return "REPELS";
+    }
+}
+
+
+}

@@ -1,0 +1,162 @@
+/********************************************************************************/
+/*										*/
+/*		Romp.java							*/
+/*										*/
+/*	Implements a Randomly Oscillating Magnetic Pendulum toy 		*/
+/*										*/
+/********************************************************************************/
+
+package edu.brown.cs.bubbles.tutorial.romp;
+
+import java.io.*;
+import java.util.*;
+
+
+public class Romp {
+
+/** Maximum number of magnets supported */
+public static int    maxMagnets = 9;
+/** Number of magnets in use */
+private int	  numMagnets;
+/** An array of Magnet objects */
+private List<Magnet> magnets;
+/** The pendulum of the toy */
+private Pendulum     pendulum;
+/** The graphical display */
+private Board	board;
+
+/** Construct an empty Romp */
+public Romp()
+{
+   magnets = new ArrayList<Magnet>();
+}
+
+/** Calls the Board.update procedure until it returns null */
+private void simulate()
+{
+   while (board.update(magnets)) {}
+
+}
+
+/** Set the initial conditions of the Romp based on input from a file
+@param in A BufferedReader constructed from an input file
+*/
+private void initialize(BufferedReader in)
+{
+   String line = null;
+   StringTokenizer tok = null;
+
+   // Read number of magnets
+   try {
+      line = in.readLine();
+   }
+   catch (IOException ex) {
+      System.err.println(ex);
+      System.exit(-1);
+   }
+   try {
+      numMagnets = Integer.parseInt(line);
+   }
+   catch (NumberFormatException ex) {
+      System.err.println(ex);
+      System.exit(-1);
+   }
+   if (numMagnets > Romp.maxMagnets) {
+      System.err.println("Too many magnets.");
+      System.exit(-1);
+   }
+
+   // Read data for each magnet
+   System.err.println("Creating " + numMagnets + " magnets.");
+   for (int i = 0; i < numMagnets; i++) {
+      try {
+	 line = in.readLine();
+      }
+      catch (IOException ex) {
+	 System.err.println(ex);
+	 System.exit(-1);
+      }
+      tok = new StringTokenizer(line);
+      if (tok.countTokens() != 3) {
+	 System.err.println("Invalid magnet spec format.");
+	 System.exit(-1);
+      }
+      try {
+	 float x = Float.valueOf(tok.nextToken()).floatValue();
+	 float y = Float.valueOf(tok.nextToken()).floatValue();
+	 Direction dir = new Direction(Integer.parseInt(tok.nextToken()));
+	 Magnet mag = new Magnet(x,y,dir);
+	 for (Magnet m : magnets) {
+	    if (mag.overlap(m)) {
+	       System.err.println("Overlapping magnets are not allowed.");
+	       System.exit(-1);
+	    }
+	 }
+	 magnets.add(mag);
+	 System.err.println("Magnet " + i + ": " + mag);
+      }
+      catch (NumberFormatException ex) {
+	 System.err.println(ex);
+	 System.exit(-1);
+      }
+
+   }
+
+   // Read pendulum data
+   System.err.println("Creating pendulum.");
+   try {
+      line = in.readLine();
+   }
+   catch (IOException ex) {
+      System.err.println(ex);
+      System.exit(-1);
+   }
+   tok = new StringTokenizer(line);
+   if (tok.countTokens() != 2) {
+      System.err.println("Invalid pendulum spec format.");
+      System.exit(-1);
+   }
+   try {
+      float x = Float.valueOf(tok.nextToken()).floatValue();
+      float y = Float.valueOf(tok.nextToken()).floatValue();
+      pendulum = new Pendulum(x,y);
+   }
+   catch (NumberFormatException ex) {
+      System.err.println(ex);
+      System.exit(-1);
+   }
+
+   System.err.println("Creating board.");
+   board = new Board(magnets,pendulum);
+
+
+}
+
+/** Take a filename from the command line, open it, pass it to the initialization routine,
+and then start the simulation */
+public static void main(String argv[])
+{
+if (argv.length < 1) {
+      System.err.println("Usage: Romp <initialization-file>");
+      System.exit(-1);
+   }
+
+   String infile = argv[0];
+   Romp romp = new Romp();
+
+   try {
+      FileReader inread = new FileReader(infile);
+      BufferedReader in = new BufferedReader(inread);
+      romp.initialize(in);
+   }
+   catch (FileNotFoundException ex) {
+      System.err.println("FIle not found: " + infile);
+      System.exit(-1);
+   }
+
+   romp.simulate();
+
+
+}
+
+}
